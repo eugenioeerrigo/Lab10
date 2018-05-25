@@ -33,6 +33,7 @@ public class PortoController {
     @FXML
     void handleCoautori(ActionEvent event) {
     	txtResult.clear();
+    	boxSecondo.getItems().clear();
     	
     	for(Author x : model.getNonCoautori(boxPrimo.getValue())) {
 			boxSecondo.getItems().add(x);

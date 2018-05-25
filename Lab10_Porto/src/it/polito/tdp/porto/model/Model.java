@@ -47,7 +47,7 @@ public class Model {
 			for(Author a2 : autori) {
 				if(this.checkConn(a1, a2)) {
 					grafo.addEdge(a1, a2);
-					System.out.println("CI STO");
+					//System.out.println("CI STO");
 				}
 			}
 		}
