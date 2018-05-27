@@ -150,10 +150,11 @@ public class PortoDAO {
 		}
 	}
 
-	public boolean checkConn(Author a1, Author a2) {
+	public List<Paper> checkConn(Author a1, Author a2, PaperIdMap map) {
 		
 		final String sql = "SELECT eprintid FROM creator AS c WHERE eprintid IN(SELECT eprintid FROM creator WHERE creator.authorid= ?) AND c.authorid = ?";
-
+		List<Paper> list = new ArrayList<>();
+		
 		try {
 			Connection conn = DBConnect.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
@@ -162,23 +163,23 @@ public class PortoDAO {
 
 			ResultSet rs = st.executeQuery();
 
-			if (rs.next()) {
-				st.close();
-				rs.close();
-				conn.close();
-				return true;
+			while (rs.next()) {
+				Paper paper = map.get(rs.getInt("eprintid"));
+				list.add(map.get(paper));
+
 			}
 			
 			st.close();
 			rs.close();
 			conn.close();
 
+			return list;
+			
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new RuntimeException("Errore Db");
 		}
 		
 
-		return false;
 	}
 }

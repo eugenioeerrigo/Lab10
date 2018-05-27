@@ -46,7 +46,9 @@ public class PortoController {
 
     @FXML
     void handleSequenza(ActionEvent event) {
-
+    	txtResult.appendText("\n----------------\n");
+    	String seq = model.trovaArticoliConn(boxPrimo.getValue(), boxSecondo.getValue());
+    	txtResult.appendText(seq);
     }
 
     @FXML

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -17,7 +20,7 @@ public class Model {
 	private AuthorIdMap amap;
 	private PaperIdMap pmap;
 	private List<Author> autori;
-	//private List<Paper> papers
+	private List<Paper> papers;
 	
 	private SimpleGraph<Author, DefaultEdge> grafo;
 	
@@ -27,7 +30,7 @@ public class Model {
 		pmap = new PaperIdMap();
 		
 		autori = pdao.getAllAutori(amap);
-		//papers = pdao.getAllPapers(pmap);
+		papers = pdao.getAllPapers(pmap);
 		this.creaGrafo();
 	}
 
@@ -78,8 +81,14 @@ public class Model {
 	private boolean checkConn(Author a1, Author a2) {
 		if(a1.equals(a2))
 			return false;
-		if(pdao.checkConn(a1, a2))
+		if(pdao.checkConn(a1, a2, pmap)!=null)
 			return true;
 		return false;
+	}
+
+	public String trovaArticoliConn(Author a1, Author a2) {
+		ShortestPathAlgorithm<Author, DefaultEdge> spa = new DijkstraShortestPath<Author, DefaultEdge>(this.grafo);
+		GraphPath<Author, DefaultEdge> gp = spa.getPath(a1, a2);
+		return null;
 	}
 }
