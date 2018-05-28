@@ -87,8 +87,23 @@ public class Model {
 	}
 
 	public String trovaArticoliConn(Author a1, Author a2) {
-		ShortestPathAlgorithm<Author, DefaultEdge> spa = new DijkstraShortestPath<Author, DefaultEdge>(this.grafo);
+		List<Paper> result = new ArrayList<>();
+		String res = "";
+		
+		DijkstraShortestPath<Author, DefaultEdge> spa = new DijkstraShortestPath<Author, DefaultEdge>(this.grafo);
 		GraphPath<Author, DefaultEdge> gp = spa.getPath(a1, a2);
-		return null;
+		List<DefaultEdge> edges = gp.getEdgeList();
+		
+		for(DefaultEdge e : edges) {
+			List<Paper> link = pdao.checkConn(grafo.getEdgeSource(e), grafo.getEdgeTarget(e), pmap);
+			for(Paper p : link) {
+				result.add(p);
+			}
+		}
+		
+		for(Paper p : result) {
+			res += p.toString()+"\n";
+		}
+		return res;
 	}
 }
