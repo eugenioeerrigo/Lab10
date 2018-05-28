@@ -33,15 +33,22 @@ public class PortoController {
     @FXML
     void handleCoautori(ActionEvent event) {
     	txtResult.clear();
-    	boxSecondo.getItems().clear();
     	
-    	for(Author x : model.getNonCoautori(boxPrimo.getValue())) {
-			boxSecondo.getItems().add(x);
-		}
+    	if(boxPrimo.getValue()==null) {
+    		txtResult.appendText("Errore: selezionare un autore\n");
+    		return ;
+    	}	
     	
     	List<Author> list = model.getCoautori(boxPrimo.getValue());
     	for(Author a : list)
     		txtResult.appendText(a+"\n");
+    	
+    	
+    	boxSecondo.getItems().clear();
+    	for(Author x : model.getNonCoautori(boxPrimo.getValue())) {
+			boxSecondo.getItems().add(x);
+		}
+    	
     }
 
     @FXML

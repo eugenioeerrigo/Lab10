@@ -50,38 +50,47 @@ public class Model {
 			for(Author a2 : autori) {
 				if(this.checkConn(a1, a2)) {
 					grafo.addEdge(a1, a2);
-					//System.out.println("CI STO");
+					System.out.println("CI STO: "+a1+" - "+a2+"\n");
 				}
 			}
 		}
+		
 	}
 		
 	public List<Author> getCoautori(Author box){
 		
-		List<Author> coautori = new ArrayList<>();
-		
-		for(Author a : autori) {
-			if(!a.equals(box) && grafo.containsEdge(box, a))
-				coautori.add(a);
-		}
-		return coautori;
+//		List<Author> coautori = new ArrayList<>();                    //Graph.neighboursOf(box)
+//		
+//		for(Author a : autori) {
+//			if(!a.equals(box) && grafo.containsEdge(box, a))
+//				coautori.add(a);
+//		}
+	
+		return Graphs.neighborListOf(this.grafo, box);
 	}
 	
 	public List<Author> getNonCoautori(Author box){
 		
-		List<Author> noncoautori = new ArrayList<>();
+//		List<Author> noncoautori = new ArrayList<>();                
+//		
+//		for(Author a : autori) {                                      
+//			if(!a.equals(box) && !grafo.containsEdge(box, a))
+//				noncoautori.add(a);
+//		}
+//		return noncoautori;
 		
-		for(Author a : autori) {
-			if(!a.equals(box) && !grafo.containsEdge(box, a))
-				noncoautori.add(a);
-		}
+		List<Author> noncoautori = new ArrayList<>(autori); 
+		
+		noncoautori.remove(box);
+		noncoautori.removeAll(this.getCoautori(box));
+		
 		return noncoautori;
 	}
 
 	private boolean checkConn(Author a1, Author a2) {
 		if(a1.equals(a2))
 			return false;
-		if(pdao.checkConn(a1, a2, pmap)!=null)
+		if(!pdao.checkConn(a1, a2, pmap).isEmpty())
 			return true;
 		return false;
 	}
@@ -90,7 +99,7 @@ public class Model {
 		List<Paper> result = new ArrayList<>();
 		String res = "";
 		
-		DijkstraShortestPath<Author, DefaultEdge> spa = new DijkstraShortestPath<Author, DefaultEdge>(this.grafo);
+		ShortestPathAlgorithm<Author, DefaultEdge> spa = new DijkstraShortestPath<Author, DefaultEdge>(this.grafo);
 		GraphPath<Author, DefaultEdge> gp = spa.getPath(a1, a2);
 		List<DefaultEdge> edges = gp.getEdgeList();
 		

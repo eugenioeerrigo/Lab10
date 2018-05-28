@@ -152,7 +152,7 @@ public class PortoDAO {
 
 	public List<Paper> checkConn(Author a1, Author a2, PaperIdMap map) {
 		
-		final String sql = "SELECT eprintid FROM creator AS c WHERE eprintid IN(SELECT eprintid FROM creator WHERE creator.authorid= ?) AND c.authorid = ?";
+		final String sql = "SELECT p.eprintid, p.title, p.issn, p.publication, p.`type`, p.types FROM creator AS c, paper AS p WHERE c.eprintid=p.eprintid AND p.eprintid IN(SELECT eprintid FROM creator WHERE creator.authorid= ?) AND c.authorid = ? ";
 		List<Paper> list = new ArrayList<>();
 		
 		try {
@@ -164,7 +164,8 @@ public class PortoDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-				Paper paper = map.get(rs.getInt("eprintid"));
+				Paper paper = new Paper(rs.getInt("eprintid"), rs.getString("title"), rs.getString("issn"), rs.getString("publication"),
+										rs.getString("type"), rs.getString("types"));
 				list.add(map.get(paper));
 
 			}
